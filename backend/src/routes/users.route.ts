@@ -33,7 +33,7 @@ router.post('/register', [
             secure: process.env.NODE_ENV === 'production',
             maxAge: 86400000
         });
-        res.sendStatus(200);
+        res.status(200).send({ message: 'User registered successfully' });
     } catch (error: unknown) {
         console.error('Error in register user controller:', error instanceof Error ? error.message : 'Unknown error');
         res.status(500).json({ message: 'Something went wrong' });
