@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.route'
 import userRoutes from './routes/users.route'
+import path from 'path'
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string);
 
@@ -16,6 +17,8 @@ app.use(cors({
     origin: process.env.FRONTEND_URL,
     credentials:true,
 }))
+
+app.use(express.static(path.join(__dirname, "../../frontend/dist")));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
