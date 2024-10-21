@@ -25,7 +25,7 @@ router.post('/', verifyToken, [
     body("pricePerNight").notEmpty().isNumeric().withMessage('Price Per Night is required and must be a Number'),
     body("facilities").notEmpty().isArray().withMessage('Facilities are required'),
 
-],upload.array("imageFiles",6), async (req: Request, res: Response) => {
+], upload.array("imageFiles", 6), async (req: Request, res: Response) => {
     try {
         const imageFiles = req.files as Express.Multer.File[];
         const newHotel: HotelType = req.body; // all other fields except images
@@ -43,10 +43,20 @@ router.post('/', verifyToken, [
         const hotel = new Hotel(newHotel);
         await hotel.save();
         res.status(201).send(hotel);
-    } catch (error:unknown) {
-        console.log('error in creating hotel', error instanceof Error ? error.message : 'Error occured'); 
+    } catch (error: unknown) {
+        console.log('error in creating hotel', error instanceof Error ? error.message : 'Error occured');
         res.status(500).json({ message: 'something went wrong' });
     }
-})
+});
+
+
+router.get('/', verifyToken, async (req: Request, res: Response) => {
+    try {
+        const hotels = await Hotel.find({ userId: req.userId });
+        res.json(hotels);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching Hotels" });
+    }
+});
 
 export default router;
