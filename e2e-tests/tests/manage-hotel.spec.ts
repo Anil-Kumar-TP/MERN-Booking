@@ -69,3 +69,33 @@ test("should display hotels", async ({ page }) => {
     await expect(page.getByRole("link", { name: 'View Details' })).toBeVisible();
     await expect(page.getByRole("link", { name: 'Add Hotel' })).toBeVisible();
 });
+
+
+test("should edit hotel", async ({ page }) => {
+    await page.goto(`${UI_URL}my-hotels`);
+
+    // Click the 'View Details' link
+    await page.getByRole("link", { name: 'View Details' }).click();
+
+    // Wait until the input field with name="name" is visible and interactable
+    const nameField = page.locator('[name="name"]');
+    await nameField.waitFor({ state: 'visible' });
+
+    // Check if the initial value is correct
+    await expect(nameField).toHaveValue("The Savoy");
+
+    // Fill the input with the new value
+    await nameField.fill("The Savoy Updated");
+
+    // Save the changes
+    await page.getByRole("button", { name: "Save" }).click();
+    await expect(page.getByText("Hotel Saved")).toBeVisible();
+
+    // Reload the page to verify the update
+    await page.reload();
+    await expect(nameField).toHaveValue("The Savoy Updated");
+
+    // Reset the value back to "The Savoy"
+    await nameField.fill("The Savoy");
+    await page.getByRole("button", { name: "Save" }).click();
+});
