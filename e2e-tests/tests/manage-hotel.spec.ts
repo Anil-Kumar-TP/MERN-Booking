@@ -43,3 +43,29 @@ test("should allow user to add a hotel", async ({ page }) => {
      
     await expect(page.getByText("Hotel Saved")).toBeVisible();
 });
+
+
+test("should display hotels", async ({ page }) => {
+    await page.goto(`${UI_URL}my-hotels`);
+
+    // Use getByRole for the heading 'The Savoy'
+    await expect(page.getByRole('heading', { name: 'The Savoy' })).toBeVisible();
+
+    // Use more specific locators within the context of the hotel container
+    const hotelContainer = page.locator('div').filter({ hasText: 'The Savoy' }).first();
+    
+    // Check visibility within hotelContainer for more specificity
+    await expect(hotelContainer.getByText("Known for its opulent Art Deco and Edwardian")).toBeVisible();
+    await expect(hotelContainer.getByText("London, UK")).toBeVisible();
+    
+    // Use the exact option to match "Luxury" specifically
+    await expect(hotelContainer.getByText("Luxury", { exact: true })).toBeVisible();
+    
+    await expect(hotelContainer.getByText("$800 per night")).toBeVisible();
+    await expect(hotelContainer.getByText("4 adults, 2 children")).toBeVisible();
+    await expect(hotelContainer.getByText("4 Star Rating")).toBeVisible();
+
+    // Use getByRole for links
+    await expect(page.getByRole("link", { name: 'View Details' })).toBeVisible();
+    await expect(page.getByRole("link", { name: 'Add Hotel' })).toBeVisible();
+});
