@@ -7,11 +7,11 @@ export type HotelType = {
     country: string;
     description: string;
     type: string;
-    adultCount: Number;
-    childCount: Number;
+    adultCount: number;
+    childCount: number;
     facilities: string[];
-    pricePerNight: Number;
-    starRating: Number;
+    pricePerNight: number;
+    starRating: number;
     imageUrls: string[];
     lastUpdated: Date;
 }
@@ -19,8 +19,8 @@ export type HotelType = {
 export type HotelSearchResponse = {
     data: HotelType[];
     pagination: {
-        total: Number;
-        page: Number;
-        pages: Number;
+        total: number;
+        page: number;
+        pages: number;
     }
 }
