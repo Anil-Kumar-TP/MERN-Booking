@@ -4,10 +4,10 @@ type SearchContext = {
     destination: string;
     checkIn: Date;
     checkOut: Date;
-    adultCount: Number;
-    childCount: Number;
+    adultCount: number;
+    childCount: number;
     hotelId: string;
-    saveSearchValues: (destination: string, checkIn: Date, checkOut: Date, adultCount: Number, childCount: Number) => void;
+    saveSearchValues: (destination: string, checkIn: Date, checkOut: Date, adultCount: number, childCount: number) => void;
 }
 
 const SearchContext = React.createContext<SearchContext | undefined>(undefined);
@@ -21,11 +21,11 @@ export const SearchContextProvider = ({ children }: SearchContextProviderProps) 
     const [destination, setDestination] = useState<string>("");
     const [checkIn, setCheckIn] = useState<Date>(new Date());
     const [checkOut, setCheckOut] = useState<Date>(new Date());
-    const [adultCount, setAdultCount] = useState<Number>(1);
-    const [childCount, setChildCount] = useState<Number>(0);
+    const [adultCount, setAdultCount] = useState<number>(1);
+    const [childCount, setChildCount] = useState<number>(0);
     const [hotelId, setHotelId] = useState<string>("");
 
-    const saveSearchValues = (destination: string, checkIn: Date, checkOut: Date, adultCount: Number, childCount: Number, hotelId?: string) => {
+    const saveSearchValues = (destination: string, checkIn: Date, checkOut: Date, adultCount: number, childCount: number, hotelId?: string) => {
         setDestination(destination);
         setCheckIn(checkIn);
         setCheckOut(checkOut);
