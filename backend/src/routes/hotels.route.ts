@@ -6,10 +6,22 @@ const router: Router = express.Router();
 router.get('/search', async (req: Request, res: Response) => {
     try {
         const query = constructSearchQuery(req.query);
+        let sortOptions = {};
+        switch (req.query.sortOption) {
+            case "starRating":
+                sortOptions = { starRating: -1 };
+                break;
+            case "pricePerNightAsc":
+                sortOptions = { pricePerNight: 1 };
+                break;
+            case "pricePerNightDesc":
+                sortOptions = { pricePerNight: -1 };
+                break;
+        }
         const pageSize = 5; //hotels in each page
         const pageNumber = parseInt(req.query.page ? req.query.page.toString() : "1"); //page number in frontend
         const skip = (pageNumber - 1) * pageSize; //if page = 3, (3-1) * 5 = 10. skip first 10 and give form 11.
-        const hotels = await Hotel.find(query).skip(skip).limit(pageSize);
+        const hotels = await Hotel.find(query).sort(sortOptions).skip(skip).limit(pageSize); //order is imp
         const total = await Hotel.countDocuments(query);
         const response: HotelSearchResponse = {
             data: hotels,
@@ -52,6 +64,32 @@ const constructSearchQuery = (queryParams: any) => {
        constructedQuery.childCount = {
            $gte: parseInt(queryParams.childCount),
        };
+    };
+
+    if (queryParams.facilities) {
+        constructedQuery.facilities = {
+            $all: Array.isArray(queryParams.facilities) ? queryParams.facilities : [queryParams.facilities]
+        };
+    };
+
+    if (queryParams.types) {
+        constructedQuery.type = {
+            $in: Array.isArray(queryParams.types) ? queryParams.types : [queryParams.types]
+        };
+    };
+
+
+    if (queryParams.stars) {
+        const starRatings = Array.isArray(queryParams.stars) ? queryParams.stars.map((star: string) => parseInt(star)) : parseInt(queryParams.stars);
+        constructedQuery.starRatings = {
+            $in: starRatings
+        };
+    };
+
+    if (queryParams.maxPrice) {
+        constructedQuery.pricePerNight = {
+            $lte: parseInt(queryParams.maxPrice).toString()
+        };
     };
 
     return constructedQuery; // Return the constructed query object
