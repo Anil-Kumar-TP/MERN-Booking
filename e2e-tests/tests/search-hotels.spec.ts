@@ -35,3 +35,17 @@ test("Should show hotel search results", async ({ page }) => {
     // Use a more specific selector to check for "The Savoy" link
     await expect(page.getByRole("link", { name: "The Savoy" })).toBeVisible();
 });
+
+test("should show hotel details", async ({ page }) => {
+    await page.goto(UI_URL);
+
+    await page.getByPlaceholder("Where are you going?").fill("UK");
+    await page.getByRole("button", { name: "Search" }).click();
+
+    // Use getByRole to ensure only the link element is selected
+    await page.getByRole("link", { name: "The Savoy" }).click();
+
+    await expect(page).toHaveURL(/detail/);
+    await expect(page.getByRole("button", { name: "Book Now" })).toBeVisible();
+});
+
