@@ -2,6 +2,7 @@ import express, { Request, Response, Router } from 'express';
 import User from '../models/user.model';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
+import verifyToken from '../middleware/auth';
 
 const router: Router = express.Router();
 
@@ -39,5 +40,20 @@ router.post('/register', [
         res.status(500).json({ message: 'Something went wrong' });
     }
 });
+
+router.get('/me', verifyToken, async (req: Request, res: Response) => {
+    const userId = req.userId;
+    try {
+        const user = await User.findById(userId).select("-password");
+        if (!user) {
+            res.status(400).json({ message: 'User not found' });
+            return;
+        }
+        res.json(user);
+    } catch (error:unknown) {
+        console.log('error in me route', error instanceof Error ? error.message : 'Error');
+        res.status(500).json({ message: 'Something went wrong' });
+    }
+})
 
 export default router;

@@ -8,6 +8,7 @@ import MyHotels from "./pages/MyHotels";
 import EditHotel from "./pages/EditHotel";
 import Search from "./pages/Search";
 import Details from "./pages/Details";
+import Booking from "./pages/Booking";
 
 const App = () => {
 
@@ -41,6 +42,11 @@ const App = () => {
             <Route path="/add-hotel" element={
               <Layout>
                 <AddHotel />
+              </Layout>
+            } />
+            <Route path="/hotel/:hotelId/booking" element={
+              <Layout>
+                <Booking />
               </Layout>
             } />
             <Route path="/edit-hotel/:hotelId" element={
