@@ -79,8 +79,18 @@ router.post('/:hotelId/bookings/payment-intent', verifyToken, async (req: Reques
     const totalCost = hotel?.pricePerNight * numberOfNights;
 
     const paymentIntent = await stripe.paymentIntents.create({
-        amount: totalCost,
+        amount: totalCost * 100,
         currency: "usd",
+        description: `Booking for hotel ${hotelId} by user ${req.userId}`,
+         shipping: {
+        name: "Test Customer", // Hard-coded customer name for testing
+        address: {
+            line1: "123 Test Street", // Hard-coded address line for testing
+            city: "Test City",
+            postal_code: "12345",
+            country: "IN", // Set to India for regulatory compliance testing
+        },
+    },
         metadata: {
             hotelId,
             userId: req.userId,
