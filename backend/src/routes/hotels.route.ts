@@ -151,7 +151,15 @@ router.post('/:hotelId/bookings', verifyToken, async (req: Request, res: Respons
     }
 })
 
-
+router.get('/', async (req: Request, res: Response) => {
+    try {
+        const hotels = await Hotel.find().sort("-lastUpdated");
+        res.json(hotels);
+    } catch (error:unknown) {
+        console.log('error in getting latest hotels', error instanceof Error ? error.message : 'Error');
+        res.status(500).json({ message: 'Error fetching hotels' });
+    }
+})
 
 const constructSearchQuery = (queryParams: any) => {
     let constructedQuery: any = {};

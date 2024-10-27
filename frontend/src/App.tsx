@@ -10,6 +10,7 @@ import Search from "./pages/Search";
 import Details from "./pages/Details";
 import Booking from "./pages/Booking";
 import MyBookings from "./pages/MyBookings";
+import Home from "./pages/Home";
 
 const App = () => {
 
@@ -20,7 +21,7 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout>
-          <p>Home Page</p>
+          <Home/>
         </Layout>} />
         <Route path="/search" element={<Layout>
           <Search/>
